@@ -18,8 +18,9 @@ public class AvatarWidget {
     private static final Identifier DEFAULT_AVATAR = Identifier.of("minecraft", "textures/entity/steve.png");
 
     public static void render(DrawContext context, String avatarUrl, int x, int y, int size) {
-        Identifier texture = getOrLoadAvatar(avatarUrl);
-        context.drawTexture(RenderLayer::getGuiTextured, texture, x, y, 0.0f, 0.0f, size, size, size, size);
+        // TODO: Implement proper texture rendering with MC 1.21.11 API
+        // For now, draw a placeholder colored rectangle
+        context.fill(x, y, x + size, y + size, 0xFF888888);
     }
 
     private static Identifier getOrLoadAvatar(String avatarUrl) {

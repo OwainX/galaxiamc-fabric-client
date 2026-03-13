@@ -2,14 +2,16 @@
 
 ## Project Overview
 
-A Fabric client-side mod for Minecraft 1.21.4 that integrates the GalaxiaNexus social platform directly into the game. Players can browse feeds, view profiles, compose posts, and interact with the Mastodon-compatible API without leaving Minecraft.
+A Fabric client-side mod for Minecraft 1.21.11 that integrates the GalaxiaNexus social platform directly into the game. Players can browse feeds, view profiles, compose posts, and interact with the Mastodon-compatible API without leaving Minecraft.
 
 ## Tech Stack
 
-- **Minecraft:** 1.21.4
-- **Fabric Loader:** 0.16.9
-- **Fabric API:** 0.119.0+
-- **Java:** 21
+- **Minecraft:** 1.21.11
+- **Fabric Loader:** 0.18.4
+- **Fabric API:** 0.141.3+1.21.11
+- **Fabric Loom:** 1.13.6
+- **Yarn Mappings:** 1.21.11+build.4
+- **Java:** 21 (OpenJDK 21.0.10 via Homebrew)
 - **HTTP Client:** `java.net.http.HttpClient` (async, non-blocking)
 - **JSON Parser:** Gson (bundled with Minecraft)
 - **Build System:** Gradle 9.4
@@ -57,15 +59,21 @@ src/main/java/com/galaxiamc/client/
 - All text uses `Text.literal()` for plain strings
 - `sendMessage(Text, boolean)` - second param is overlay flag (use `false` for chat)
 
-### Mouse Scroll Handling (MC 1.21.4)
+### Mouse Scroll Handling (MC 1.21.11)
 - Signature: `mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount)`
 - Parent class methods like `getScrollAmount()` and `getMaxPosition()` are NOT available in AlwaysSelectedEntryListWidget
 - Scroll-to-bottom pagination needs alternative approach (manual trigger or event-based)
 
-### Texture Rendering
-- Use `RenderLayer::getGuiTextured` for `DrawContext.drawTexture()` calls
+### Texture Rendering (MC 1.21.11)
+- **Avatar rendering:** Currently uses placeholder rectangle (`context.fill()`) - proper texture rendering API needs research
+- DrawContext methods require `RenderPipeline` parameter (API changed from 1.21.4)
 - Avatar cache: in-memory `Map<String, Identifier>`
-- Default avatar: `minecraft:textures/entity/steve.png`
+- Default avatar: `minecraft:textures/entity/steve.png` (not currently used)
+
+### Input Handling (MC 1.21.11)
+- Removed `keyPressed()` and `charTyped()` overrides from ComposeScreen - API signatures changed
+- TextFieldWidget still handles input internally
+- KeyBinding.Category now requires `Identifier` parameter instead of String
 
 ### Configuration
 - Stored at `config/galaxiamc-client.json`
@@ -87,11 +95,13 @@ src/main/java/com/galaxiamc/client/
 
 ## Known Issues / TODOs
 
-1. **Scroll-to-bottom pagination**: Currently disabled - need to find correct MC 1.21 API for scroll position detection
-2. **Avatar caching**: In-memory only - consider disk cache for persistence
-3. **Error handling**: Basic error messages - could add retry logic and better UX
-4. **Reply threading**: Limited to depth 3 - could support deeper threads
-5. **Image attachments**: Not yet supported - status content is text-only
+1. **Avatar rendering**: Currently using placeholder rectangles - need to research proper texture drawing API for MC 1.21.11 (RenderPipeline system)
+2. **Scroll-to-bottom pagination**: Currently disabled - need to find correct MC 1.21.11 API for scroll position detection
+3. **Avatar caching**: In-memory only - consider disk cache for persistence
+4. **Widget rendering**: StatusEntryWidget.render() signature changed - x/entryWidth now hardcoded to 0, needs proper parent list integration
+5. **Error handling**: Basic error messages - could add retry logic and better UX
+6. **Reply threading**: Limited to depth 3 - could support deeper threads
+7. **Image attachments**: Not yet supported - status content is text-only
 
 ## API Endpoints (Mastodon-compatible)
 

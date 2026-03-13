@@ -98,19 +98,5 @@ public class ComposeScreen extends Screen {
         }
     }
 
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (contentField != null && contentField.isFocused()) {
-            return contentField.keyPressed(keyCode, scanCode, modifiers);
-        }
-        return super.keyPressed(keyCode, scanCode, modifiers);
-    }
 
-    @Override
-    public boolean charTyped(char chr, int modifiers) {
-        if (contentField != null && contentField.isFocused()) {
-            return contentField.charTyped(chr, modifiers);
-        }
-        return super.charTyped(chr, modifiers);
-    }
 }

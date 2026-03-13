@@ -3,6 +3,7 @@ package com.galaxiamc.client.keybind;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyBindings {
@@ -13,7 +14,7 @@ public class KeyBindings {
             "key.galaxiamc.open",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_G,
-            "GalaxiaMC"
+            KeyBinding.Category.create(Identifier.of("galaxiamc", "keybinds"))
         ));
     }
 }

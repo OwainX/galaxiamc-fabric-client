@@ -19,8 +19,11 @@ public class StatusEntryWidget extends AlwaysSelectedEntryListWidget.Entry<Statu
     }
 
     @Override
-    public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    public void render(DrawContext context, int index, int y, boolean selected, float tickDelta) {
         TextRenderer textRenderer = client.textRenderer;
+        int x = 0;
+        int entryWidth = 0;
+        int entryHeight = 32;
 
         AvatarWidget.render(context, status.account.avatarStatic, x + 2, y + 2, 16);
 
@@ -33,12 +36,11 @@ public class StatusEntryWidget extends AlwaysSelectedEntryListWidget.Entry<Statu
         }
         context.drawText(textRenderer, Text.literal(content), x + 22, y + 14, 0xAAAAAA, false);
 
-        if (hovered) {
+        if (selected) {
             context.fill(x, y, x + entryWidth, y + entryHeight, 0x40FFFFFF);
         }
     }
 
-    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (onClick != null) {
             onClick.run();
