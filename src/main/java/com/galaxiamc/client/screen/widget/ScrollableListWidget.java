@@ -31,7 +31,16 @@ public class ScrollableListWidget extends AlwaysSelectedEntryListWidget<StatusEn
     }
 
     @Override
-    protected int getScrollbarX() {
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        boolean result = super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        
+        // TODO: Implement scroll-to-bottom detection when we identify the correct MC 1.21 methods
+        // For now, pagination will need to be triggered manually
+        
+        return result;
+    }
+
+    protected int getScrollbarPositionX() {
         return this.width - 6;
     }
 

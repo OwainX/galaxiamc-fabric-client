@@ -1,7 +1,8 @@
 package com.galaxiamc.client.screen;
 
-import com.galaxiamc.client.GalaxiaMCClient;
+import com.galaxiamc.client.api.ApiClient;
 import com.galaxiamc.client.api.models.Status;
+import com.galaxiamc.client.config.GalaxiaConfig;
 import com.galaxiamc.client.screen.widget.ScrollableListWidget;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -14,6 +15,7 @@ import java.util.List;
 
 public class FeedScreen extends Screen {
     private final Screen parent;
+    private final ApiClient apiClient;
     private ScrollableListWidget listWidget;
     private boolean isHomeFeed = true;
     private boolean isLoading = false;
@@ -23,6 +25,7 @@ public class FeedScreen extends Screen {
     public FeedScreen(Screen parent) {
         super(Text.translatable("screen.galaxiamc.feed.title"));
         this.parent = parent;
+        this.apiClient = new ApiClient(GalaxiaConfig.getInstance());
     }
 
     @Override
@@ -67,8 +70,8 @@ public class FeedScreen extends Screen {
         isLoading = true;
 
         var future = isHomeFeed 
-            ? GalaxiaMCClient.getApiClient().getHomeFeed(currentMaxId)
-            : GalaxiaMCClient.getApiClient().getPublicFeed(currentMaxId);
+            ? apiClient.getHomeFeed(currentMaxId)
+            : apiClient.getPublicFeed(currentMaxId);
 
         future.thenAccept(response -> {
             if (client != null) {

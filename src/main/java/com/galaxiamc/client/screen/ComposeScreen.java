@@ -1,6 +1,7 @@
 package com.galaxiamc.client.screen;
 
-import com.galaxiamc.client.GalaxiaMCClient;
+import com.galaxiamc.client.api.ApiClient;
+import com.galaxiamc.client.config.GalaxiaConfig;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -11,6 +12,7 @@ import net.minecraft.text.Text;
 public class ComposeScreen extends Screen {
     private final Screen parent;
     private final String replyToId;
+    private final ApiClient apiClient;
     private TextFieldWidget contentField;
     private static final int MAX_CHARS = 500;
 
@@ -22,6 +24,7 @@ public class ComposeScreen extends Screen {
         super(Text.translatable("screen.galaxiamc.compose.title"));
         this.parent = parent;
         this.replyToId = replyToId;
+        this.apiClient = new ApiClient(GalaxiaConfig.getInstance());
     }
 
     @Override
@@ -54,7 +57,7 @@ public class ComposeScreen extends Screen {
             return;
         }
 
-        GalaxiaMCClient.getApiClient().postStatus(content, replyToId).thenAccept(response -> {
+        apiClient.postStatus(content, replyToId).thenAccept(response -> {
             if (client != null) {
                 client.execute(() -> {
                     if (response.isSuccess()) {

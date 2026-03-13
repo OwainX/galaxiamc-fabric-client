@@ -1,7 +1,8 @@
 package com.galaxiamc.client.screen;
 
-import com.galaxiamc.client.GalaxiaMCClient;
+import com.galaxiamc.client.api.ApiClient;
 import com.galaxiamc.client.api.models.Notification;
+import com.galaxiamc.client.config.GalaxiaConfig;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -13,12 +14,14 @@ import java.util.List;
 
 public class NotificationsScreen extends Screen {
     private final Screen parent;
+    private final ApiClient apiClient;
     private boolean isLoading = false;
     private final List<Notification> notifications = new ArrayList<>();
 
     public NotificationsScreen(Screen parent) {
         super(Text.translatable("screen.galaxiamc.notifications.title"));
         this.parent = parent;
+        this.apiClient = new ApiClient(GalaxiaConfig.getInstance());
     }
 
     @Override
@@ -36,7 +39,7 @@ public class NotificationsScreen extends Screen {
         if (isLoading) return;
         isLoading = true;
 
-        GalaxiaMCClient.getApiClient().getNotifications().thenAccept(response -> {
+        apiClient.getNotifications().thenAccept(response -> {
             if (client != null) {
                 client.execute(() -> {
                     isLoading = false;
