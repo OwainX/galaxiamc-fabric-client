@@ -1,7 +1,8 @@
 package com.galaxiamc.client.screen;
 
-import com.galaxiamc.client.GalaxiaMCClient;
+import com.galaxiamc.client.api.ApiClient;
 import com.galaxiamc.client.api.models.Status;
+import com.galaxiamc.client.config.GalaxiaConfig;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -11,11 +12,13 @@ import net.minecraft.text.Text;
 public class PostDetailScreen extends Screen {
     private final Screen parent;
     private final Status status;
+    private final ApiClient apiClient;
 
     public PostDetailScreen(Screen parent, Status status) {
         super(Text.literal(status.account.username));
         this.parent = parent;
         this.status = status;
+        this.apiClient = new ApiClient(GalaxiaConfig.getInstance());
     }
 
     @Override
@@ -52,8 +55,8 @@ public class PostDetailScreen extends Screen {
 
     private void toggleLike() {
         var future = status.favourited 
-            ? GalaxiaMCClient.getApiClient().unfavouriteStatus(status.id)
-            : GalaxiaMCClient.getApiClient().favouriteStatus(status.id);
+            ? apiClient.unfavouriteStatus(status.id)
+            : apiClient.favouriteStatus(status.id);
 
         future.thenAccept(response -> {
             if (client != null) {
@@ -71,8 +74,8 @@ public class PostDetailScreen extends Screen {
 
     private void toggleBoost() {
         var future = status.reblogged 
-            ? GalaxiaMCClient.getApiClient().unreblogStatus(status.id)
-            : GalaxiaMCClient.getApiClient().reblogStatus(status.id);
+            ? apiClient.unreblogStatus(status.id)
+            : apiClient.reblogStatus(status.id);
 
         future.thenAccept(response -> {
             if (client != null) {

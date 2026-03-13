@@ -1,8 +1,9 @@
 package com.galaxiamc.client.screen;
 
-import com.galaxiamc.client.GalaxiaMCClient;
+import com.galaxiamc.client.api.ApiClient;
 import com.galaxiamc.client.api.models.Account;
 import com.galaxiamc.client.api.models.Status;
+import com.galaxiamc.client.config.GalaxiaConfig;
 import com.galaxiamc.client.screen.widget.ScrollableListWidget;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -16,6 +17,7 @@ import java.util.List;
 public class ProfileScreen extends Screen {
     private final Screen parent;
     private final Account account;
+    private final ApiClient apiClient;
     private ScrollableListWidget listWidget;
     private boolean isLoading = false;
     private String currentMaxId = null;
@@ -25,6 +27,7 @@ public class ProfileScreen extends Screen {
         super(Text.literal(account.username));
         this.parent = parent;
         this.account = account;
+        this.apiClient = new ApiClient(GalaxiaConfig.getInstance());
     }
 
     @Override
@@ -55,7 +58,7 @@ public class ProfileScreen extends Screen {
         if (isLoading) return;
         isLoading = true;
 
-        GalaxiaMCClient.getApiClient().getAccountStatuses(account.id, currentMaxId).thenAccept(response -> {
+        apiClient.getAccountStatuses(account.id, currentMaxId).thenAccept(response -> {
             if (client != null) {
                 client.execute(() -> {
                     isLoading = false;
