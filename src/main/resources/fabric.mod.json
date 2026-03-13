@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "galaxiamc-client",
+  "version": "${version}",
+  "name": "GalaxiaMC Client",
+  "description": "In-game social platform client for GalaxiaMC",
+  "authors": [
+    "GalaxiaMC"
+  ],
+  "contact": {
+    "homepage": "https://galaxiamc.com",
+    "sources": "https://github.com/galaxiamc/fabric-client"
+  },
+  "license": "MIT",
+  "icon": "assets/galaxiamc-client/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.galaxiamc.client.GalaxiaMCClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "fabric-api": "*",
+    "minecraft": "~1.21",
+    "java": ">=21"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}
